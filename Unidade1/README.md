@@ -1,6 +1,7 @@
 # Atividades 1
 
 [Equipe-08.pdf](Equipe-08.pdf)  
+[Slides](Slides.pdf)  
 
 ## Equipe 8
 
