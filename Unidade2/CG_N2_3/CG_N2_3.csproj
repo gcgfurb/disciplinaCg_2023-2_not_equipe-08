@@ -1,9 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <RootNamespace>gcgcg</RootNamespace>
     <AssemblyName>CG_N2_3</AssemblyName>
     <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
     <PublishSingleFile>true</PublishSingleFile>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
@@ -19,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\CG_Biblioteca\CG_Biblioteca.csproj" />
+    <ProjectReference Include=".\CG_Biblioteca\CG_Biblioteca.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -48,4 +51,5 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
 </Project>
