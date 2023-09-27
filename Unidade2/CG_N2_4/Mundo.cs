@@ -11,6 +11,7 @@ using OpenTK.Windowing.Desktop;
 using System;
 using System.Collections.Generic;
 using OpenTK.Mathematics;
+using System.Drawing;
 
 //FIXME: padrão Singleton
 
@@ -21,6 +22,7 @@ namespace gcgcg
     Objeto mundo;
     private char rotuloAtual = '?';
     private Objeto objetoSelecionado = null;
+    private Spline spline = null;
 
     private readonly float[] _sruEixos =
     {
@@ -90,19 +92,16 @@ namespace gcgcg
             #endregion
 
 #if CG_Privado
-      #region Objeto: circulo  
-      objetoSelecionado = new Circulo(mundo, ref rotuloAtual, 0.2, new Ponto4D());
-      objetoSelecionado.shaderCor = new Shader("Shaders/shader.vert", "Shaders/shaderAmarela.frag");
-      #endregion
-
-      #region Objeto: SrPalito  
-      objetoSelecionado = new SrPalito(mundo, ref rotuloAtual);
-      #endregion
-
       #region Objeto: Spline
       objetoSelecionado = new Spline(mundo, ref rotuloAtual);
       #endregion
 #endif
+
+      spline = new Spline(mundo, ref rotuloAtual)
+      {
+            shaderCor = new Shader("Shaders/shader.vert", "Shaders/shaderAmarela.frag")
+      };
+
     }
 
     protected override void OnRenderFrame(FrameEventArgs e)
@@ -123,7 +122,7 @@ namespace gcgcg
       base.OnUpdateFrame(e);
 
       #region Variables
-      int nextAngle = 0;
+            int currentBezierPoints;
       #endregion
 
       #region Teclado
@@ -132,7 +131,41 @@ namespace gcgcg
       if (input.IsKeyDown(Keys.Escape))
       {
         Close();
-      } 
+      } else if (input.IsKeyPressed(Keys.Space)) {
+            // Change point
+            spline.ChangeSelectedPoint();
+      } else if (input.IsKeyPressed(Keys.C)) {
+            // Move UP
+            spline.MoveSelectedPoint('C');
+            spline.ObjetoAtualizar();
+      } else if (input.IsKeyPressed(Keys.B)) {
+            // Move DOWN
+            spline.MoveSelectedPoint('B');
+            spline.ObjetoAtualizar();
+      } else if (input.IsKeyPressed(Keys.E)) {
+            // Move LEFT
+            spline.MoveSelectedPoint('E');
+            spline.ObjetoAtualizar();
+      } else if (input.IsKeyPressed(Keys.D)) {
+            // Move RIGHT
+            spline.MoveSelectedPoint('D');
+            spline.ObjetoAtualizar();
+      } else if (input.IsKeyPressed(Keys.KeyPadAdd)) {
+            // Add point
+            spline.BezierPoints++;
+            spline.ChangeSplinePoint();
+            Console.WriteLine(spline.BezierPoints);
+      } else if (input.IsKeyPressed(Keys.KeyPadSubtract)) {
+            // Remove point
+            if (spline.BezierPoints > 1) {
+                  spline.BezierPoints--;
+            }
+            spline.ChangeSplinePoint();
+            Console.WriteLine(spline.BezierPoints);
+      } else if (input.IsKeyPressed(Keys.R)) {
+            // Reset points
+            spline.ResetSpline();
+      }
       #endregion
     }
 
