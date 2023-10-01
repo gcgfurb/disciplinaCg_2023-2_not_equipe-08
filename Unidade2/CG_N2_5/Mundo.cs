@@ -235,12 +235,10 @@ namespace gcgcg
                                                 new Ponto4D(largeCircleRadius - largeCircle.PontosId(0).X, largeCircle.PontosId(0).Y)
                                           );
 
-      // return distance + minorCircleRadius < biggerCircleRadius && minorCircleRadius < biggerCircleRadius;
       if (Math.Round(distance, 2) == Math.Round(largeCircleRadius, 2)) {
             return false;
       }
       return true;
-      // return distance - (biggerCircleRadius + minorCircleRadius) < 0.00001;
     }
 
     protected override void OnResize(ResizeEventArgs e)
