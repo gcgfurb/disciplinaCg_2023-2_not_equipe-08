@@ -1,0 +1,14 @@
+D:\Furb-trabalhos\Computação Gráfica\disciplinaCg_2023-2_not_equipe-08\Unidade3\bin\Debug\net7.0\Unidade3.exe
+D:\Furb-trabalhos\Computação Gráfica\disciplinaCg_2023-2_not_equipe-08\Unidade3\bin\Debug\net7.0\Unidade3.deps.json
+D:\Furb-trabalhos\Computação Gráfica\disciplinaCg_2023-2_not_equipe-08\Unidade3\bin\Debug\net7.0\Unidade3.runtimeconfig.json
+D:\Furb-trabalhos\Computação Gráfica\disciplinaCg_2023-2_not_equipe-08\Unidade3\bin\Debug\net7.0\Unidade3.dll
+D:\Furb-trabalhos\Computação Gráfica\disciplinaCg_2023-2_not_equipe-08\Unidade3\bin\Debug\net7.0\Unidade3.pdb
+D:\Furb-trabalhos\Computação Gráfica\disciplinaCg_2023-2_not_equipe-08\Unidade3\obj\Debug\net7.0\Unidade3.GeneratedMSBuildEditorConfig.editorconfig
+D:\Furb-trabalhos\Computação Gráfica\disciplinaCg_2023-2_not_equipe-08\Unidade3\obj\Debug\net7.0\Unidade3.AssemblyInfoInputs.cache
+D:\Furb-trabalhos\Computação Gráfica\disciplinaCg_2023-2_not_equipe-08\Unidade3\obj\Debug\net7.0\Unidade3.AssemblyInfo.cs
+D:\Furb-trabalhos\Computação Gráfica\disciplinaCg_2023-2_not_equipe-08\Unidade3\obj\Debug\net7.0\Unidade3.csproj.CoreCompileInputs.cache
+D:\Furb-trabalhos\Computação Gráfica\disciplinaCg_2023-2_not_equipe-08\Unidade3\obj\Debug\net7.0\Unidade3.dll
+D:\Furb-trabalhos\Computação Gráfica\disciplinaCg_2023-2_not_equipe-08\Unidade3\obj\Debug\net7.0\refint\Unidade3.dll
+D:\Furb-trabalhos\Computação Gráfica\disciplinaCg_2023-2_not_equipe-08\Unidade3\obj\Debug\net7.0\Unidade3.pdb
+D:\Furb-trabalhos\Computação Gráfica\disciplinaCg_2023-2_not_equipe-08\Unidade3\obj\Debug\net7.0\Unidade3.genruntimeconfig.cache
+D:\Furb-trabalhos\Computação Gráfica\disciplinaCg_2023-2_not_equipe-08\Unidade3\obj\Debug\net7.0\ref\Unidade3.dll
