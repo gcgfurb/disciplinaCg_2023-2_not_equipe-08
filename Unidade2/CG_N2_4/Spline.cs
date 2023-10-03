@@ -79,6 +79,8 @@ namespace gcgcg
             {
                 bezierPointsList.Add(CalculatePoint(t));
             }
+
+            bezierPointsList.Add(CalculatePoint(1.0));
         }
 
         private void CreateBezierLines(char _rotulo = '@')
