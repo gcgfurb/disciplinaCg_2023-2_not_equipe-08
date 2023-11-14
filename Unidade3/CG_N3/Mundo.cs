@@ -229,6 +229,10 @@ namespace gcgcg
     private void removePolygon() {
       mundo.ObjetoRemover(objetoSelecionado);
       objetoSelecionado = mundo.GrafocenaBuscaProximo(objetoSelecionado);
+
+      if (objetoSelecionado == null) {
+        objetoSelecionado = mundo;
+      }
     }
 
     // 4. Estrutura de dados: vértices mover
