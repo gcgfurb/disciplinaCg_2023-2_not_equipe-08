@@ -43,7 +43,6 @@ namespace gcgcg
 
 #region Variables
     private List<Ponto4D> polygonPoints = new List<Ponto4D>();
-    private bool isDrawing = false;
     private Objeto newObject;
     private Shader[] colors = new Shader[4];
     private int currentColorIndex = 0;
