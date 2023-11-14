@@ -126,7 +126,7 @@ namespace gcgcg
     {
       this.objetosLista.Add(filho);
     }
-
+    
     public Ponto4D PontosId(int id)
     {
       return pontosLista[id];
@@ -142,6 +142,42 @@ namespace gcgcg
     {
       pontosLista[posicao] = pto;
       ObjetoAtualizar();
+    }
+
+    public void PontosRemover(Ponto4D mouseLocation) 
+    {
+      if (pontosLista.Count == 1) {
+        return;
+      }
+      
+      pontosLista.RemoveAt(getClosestIndex(mouseLocation));
+      ObjetoAtualizar();
+    }
+
+    public int getClosestIndex(Ponto4D mouseLocation) {
+      int closestIndex = -1;
+      double closestDistance = double.MaxValue;
+      
+      for (int i = 0; i < pontosLista.Count; i++) {
+        double distance = Matematica.distancia(mouseLocation, pontosLista[i]);
+
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = i;
+        }
+      }
+
+      return closestIndex;
+    }
+
+    public int getPointsListLength() {
+      return pontosLista.Count;
+    }
+
+    public void ObjetoRemover(Objeto objetoSelecionado)
+    {
+      Objeto tempObj = GrafocenaBusca(objetoSelecionado.rotulo);
+      tempObj.paiRef.objetosLista.Remove(tempObj);
     }
 
     #endregion

@@ -1,7 +1,5 @@
 ﻿#define CG_Gizmo  // debugar gráfico.
 #define CG_OpenGL // render OpenGL.
-// #define CG_DirectX // render DirectX.
-// #define CG_Privado // código do professor.
 
 using CG_Biblioteca;
 using OpenTK.Graphics.OpenGL4;
@@ -43,6 +41,15 @@ namespace gcgcg
     private Shader _shaderMagenta;
     private Shader _shaderAmarela;
 
+#region Variables
+    private List<Ponto4D> polygonPoints = new List<Ponto4D>();
+    private bool isDrawing = false;
+    private Objeto newObject;
+    private Shader[] colors = new Shader[4];
+    private int currentColorIndex = 0;
+
+  #endregion
+
     public Mundo(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
            : base(gameWindowSettings, nativeWindowSettings)
     {
@@ -51,25 +58,7 @@ namespace gcgcg
 
     private void Diretivas()
     {
-#if DEBUG
-      Console.WriteLine("Debug version");
-#endif      
-#if RELEASE
-    Console.WriteLine("Release version");
-#endif      
-#if CG_Gizmo      
-      Console.WriteLine("#define CG_Gizmo  // debugar gráfico.");
-#endif
-#if CG_OpenGL      
-      Console.WriteLine("#define CG_OpenGL // render OpenGL.");
-#endif
-#if CG_DirectX      
-      Console.WriteLine("#define CG_DirectX // render DirectX.");
-#endif
-#if CG_Privado      
-      Console.WriteLine("#define CG_Privado // código do professor.");
-#endif
-      Console.WriteLine("__________________________________ \n");
+
     }
 
     protected override void OnLoad()
@@ -90,6 +79,11 @@ namespace gcgcg
       _shaderAmarela = new Shader("Shaders/shader.vert", "Shaders/shaderAmarela.frag");
       #endregion
 
+      colors[0] = _shaderAzul;
+      colors[1] = _shaderVermelha;
+      colors[2] = _shaderVerde;
+      colors[3] = _shaderBranca;
+
       #region Eixos: SRU  
       _vertexBufferObject_sruEixos = GL.GenBuffer();
       GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject_sruEixos);
@@ -100,58 +94,10 @@ namespace gcgcg
       GL.EnableVertexAttribArray(0);
       #endregion
 
-      #region Objeto: polígono qualquer  
-      List<Ponto4D> pontosPoligonoBandeira = new List<Ponto4D>();
-      pontosPoligonoBandeira.Add(new Ponto4D(0.25, 0.25));
-      pontosPoligonoBandeira.Add(new Ponto4D(0.75, 0.25));
-      pontosPoligonoBandeira.Add(new Ponto4D(0.75, 0.75));
-      pontosPoligonoBandeira.Add(new Ponto4D(0.50, 0.50));
-      pontosPoligonoBandeira.Add(new Ponto4D(0.25, 0.75));
-      objetoSelecionado = new Poligono(mundo, ref rotuloNovo, pontosPoligonoBandeira);
-      #endregion
-      #region declara um objeto filho ao polígono
-      List<Ponto4D> pontosPoligonoTriangulo = new List<Ponto4D>();
-      pontosPoligonoTriangulo.Add(new Ponto4D(0.50, 0.50));
-      pontosPoligonoTriangulo.Add(new Ponto4D(0.75, 0.75));
-      pontosPoligonoTriangulo.Add(new Ponto4D(0.25, 0.75));
-      objetoSelecionado = new Poligono(objetoSelecionado, ref rotuloNovo, pontosPoligonoTriangulo);
-      #endregion
-#if CG_Privado
-      #region declara um objeto neto ao polígono
-      objetoSelecionado = new Circulo(objetoSelecionado, ref rotuloNovo, 0.05, new Ponto4D(0.50, 0.50));
-      objetoSelecionado.PrimitivaTipo = PrimitiveType.LineLoop;
-      #endregion
-#endif
-
       #region Objeto: retângulo  
-      objetoSelecionado = new Retangulo(mundo, ref rotuloNovo, new Ponto4D(-0.25, 0.25), new Ponto4D(-0.75, 0.75));
-      objetoSelecionado.PrimitivaTipo = PrimitiveType.LineLoop;
+      // objetoSelecionado = new Retangulo(mundo, ref rotuloNovo, new Ponto4D(-0.25, 0.25), new Ponto4D(-0.75, 0.75));
+      // objetoSelecionado.PrimitivaTipo = PrimitiveType.LineLoop;
       #endregion
-
-      // #region Objeto: segmento de reta  
-      // objetoSelecionado = new SegReta(mundo, ref rotuloNovo, new Ponto4D(-0.5, -0.5), new Ponto4D());
-      // #endregion
-
-      // #region Objeto: ponto  
-      // objetoSelecionado = new Ponto(mundo, ref rotuloNovo, new Ponto4D(-0.25, -0.25));
-      // objetoSelecionado.PrimitivaTipo = PrimitiveType.Points;
-      // objetoSelecionado.PrimitivaTamanho = 5;
-      // #endregion
-
-#if CG_Privado
-      #region Objeto: circulo  
-      objetoSelecionado = new Circulo(mundo, ref rotuloNovo, 0.2, new Ponto4D());
-      #endregion
-
-      #region Objeto: SrPalito  
-      objetoSelecionado = new SrPalito(mundo, ref rotuloNovo);
-      #endregion
-
-      #region Objeto: Spline
-      objetoSelecionado = new Spline(mundo, ref rotuloNovo);
-      #endregion
-#endif
-
     }
 
     protected override void OnRenderFrame(FrameEventArgs e)
@@ -162,7 +108,7 @@ namespace gcgcg
 
       mundo.Desenhar(new Transformacao4D());
 
-#if CG_Gizmo      
+#if CG_Gizmo
       Gizmo_Sru3D();
       Gizmo_BBox();
 #endif
@@ -188,8 +134,6 @@ namespace gcgcg
       }
       if (input.IsKeyPressed(Keys.G))
         mundo.GrafocenaImprimir("");
-      if (input.IsKeyPressed(Keys.P) && objetoSelecionado != null)
-        System.Console.WriteLine(objetoSelecionado.ToString());
       if (input.IsKeyPressed(Keys.M) && objetoSelecionado != null)
         objetoSelecionado.MatrizImprimir();
       //TODO: não está atualizando a BBox com as transformações geométricas
@@ -203,13 +147,13 @@ namespace gcgcg
         objetoSelecionado.MatrizTranslacaoXYZ(0, 0.05, 0);
       if (input.IsKeyPressed(Keys.Down) && objetoSelecionado != null)
         objetoSelecionado.MatrizTranslacaoXYZ(0, -0.05, 0);
-      if (input.IsKeyPressed(Keys.PageUp) && objetoSelecionado != null)
+      if (input.IsKeyPressed(Keys.D8) && objetoSelecionado != null)
         objetoSelecionado.MatrizEscalaXYZ(2, 2, 2);
-      if (input.IsKeyPressed(Keys.PageDown) && objetoSelecionado != null)
+      if (input.IsKeyPressed(Keys.D7) && objetoSelecionado != null)
         objetoSelecionado.MatrizEscalaXYZ(0.5, 0.5, 0.5);
-      if (input.IsKeyPressed(Keys.Home) && objetoSelecionado != null)
+      if (input.IsKeyPressed(Keys.D9) && objetoSelecionado != null)
         objetoSelecionado.MatrizEscalaXYZBBox(0.5, 0.5, 0.5);
-      if (input.IsKeyPressed(Keys.End) && objetoSelecionado != null)
+      if (input.IsKeyPressed(Keys.D0) && objetoSelecionado != null)
         objetoSelecionado.MatrizEscalaXYZBBox(2, 2, 2);
       if (input.IsKeyPressed(Keys.D1) && objetoSelecionado != null)
         objetoSelecionado.MatrizRotacao(10);
@@ -219,35 +163,112 @@ namespace gcgcg
         objetoSelecionado.MatrizRotacaoZBBox(10);
       if (input.IsKeyPressed(Keys.D4) && objetoSelecionado != null)
         objetoSelecionado.MatrizRotacaoZBBox(-10);
+      if (input.IsKeyPressed(Keys.Enter)) {
+        objetoSelecionado = newObject;
+        polygonPoints.Clear();
+      }
+      
+      if (input.IsKeyPressed(Keys.D) && objetoSelecionado != null) {
+        removePolygon();
+      }
+
+      if (input.IsKeyPressed(Keys.E) && objetoSelecionado != null) {
+        removePolygonPoint();
+      }
+
+      if (input.IsKeyPressed(Keys.R) && objetoSelecionado != null) {
+        changePolygonColor();
+      }
+
+      if (input.IsKeyDown(Keys.V) && objetoSelecionado != null) {
+        movePolygonPoint();
+      }
+
+      if (input.IsKeyPressed(Keys.P) && objetoSelecionado != null) {
+        changePolygonFormat();
+        System.Console.WriteLine(objetoSelecionado.ToString());
+      }
+      
       #endregion
 
       #region  Mouse
 
       if (MouseState.IsButtonPressed(MouseButton.Left))
       {
-        System.Console.WriteLine("MouseState.IsButtonPressed(MouseButton.Left)");
-        System.Console.WriteLine("__ Valores do Espaço de Tela");
-        System.Console.WriteLine("Vector2 mousePosition: " + MousePosition);
-        System.Console.WriteLine("Vector2i windowSize: " + Size);
+        objetoSelecionado = mundo;
       }
-      if (MouseState.IsButtonDown(MouseButton.Right) && objetoSelecionado != null)
-      {
-        System.Console.WriteLine("MouseState.IsButtonDown(MouseButton.Right)");
-
-        int janelaLargura = Size.X;
-        int janelaAltura = Size.Y;
-        Ponto4D mousePonto = new Ponto4D(MousePosition.X, MousePosition.Y);
-        Ponto4D sruPonto = Utilitario.NDC_TelaSRU(janelaLargura, janelaAltura, mousePonto);
-
-        objetoSelecionado.PontosAlterar(sruPonto, 0);
+      if (MouseState.IsButtonReleased(MouseButton.Right)) {
+        drawPolygon();
       }
-      if (MouseState.IsButtonReleased(MouseButton.Right))
-      {
-        System.Console.WriteLine("MouseState.IsButtonReleased(MouseButton.Right)");
-      }
-
       #endregion
+    }
 
+    // 2. Estrutura de dados: polígono
+    // 6. Visualização: rastro
+    private void drawPolygon() {
+      polygonPoints.Add(getMouseLocation());
+        
+        if (polygonPoints.Count == 2) {
+          
+          Objeto parentObject = mundo;
+
+          if (objetoSelecionado != null) {
+            parentObject = objetoSelecionado;
+          }
+
+          newObject = new Poligono(parentObject, ref rotuloNovo, new List<Ponto4D>(polygonPoints.ToList()));
+          
+          objetoSelecionado = newObject;
+
+        } else if (polygonPoints.Count > 2){
+          newObject.PontosAdicionar(polygonPoints.Last());
+          newObject.ObjetoAtualizar();
+        }
+    }
+
+    // 3. Estrutura de dados: polígono
+    private void removePolygon() {
+      mundo.ObjetoRemover(objetoSelecionado);
+      objetoSelecionado = mundo.GrafocenaBuscaProximo(objetoSelecionado);
+    }
+
+    // 4. Estrutura de dados: vértices mover
+    private void movePolygonPoint() {
+      int vertexIndex = objetoSelecionado.getClosestIndex(getMouseLocation());
+      objetoSelecionado.PontosAlterar(getMouseLocation(), vertexIndex);
+    }
+
+    // 5. Estrutura de dados: vértices remover
+    private void removePolygonPoint() {
+      objetoSelecionado.PontosRemover(getMouseLocation());
+
+      if (objetoSelecionado.getPointsListLength() == 1) {
+        mundo.ObjetoRemover(objetoSelecionado);
+      }
+    }
+
+    // 7. Interação: desenho
+    private void changePolygonFormat() {
+      if (objetoSelecionado.PrimitivaTipo == PrimitiveType.LineLoop) {
+        objetoSelecionado.PrimitivaTipo = PrimitiveType.LineStrip;
+      } else {
+        objetoSelecionado.PrimitivaTipo = PrimitiveType.LineLoop;
+      }
+    }
+
+    // 8. Interação: cores
+    private void changePolygonColor() {
+      currentColorIndex = (currentColorIndex + 1) % colors.Length;
+      objetoSelecionado.shaderObjeto = colors[currentColorIndex];
+    }
+
+    private Ponto4D getMouseLocation() {
+      int janelaLargura = Size.X;
+      int janelaAltura = Size.Y;
+      
+      Ponto4D mousePonto = new Ponto4D(MousePosition.X, MousePosition.Y);
+
+      return Utilitario.NDC_TelaSRU(janelaLargura, janelaAltura, mousePonto);
     }
 
     protected override void OnResize(ResizeEventArgs e)
