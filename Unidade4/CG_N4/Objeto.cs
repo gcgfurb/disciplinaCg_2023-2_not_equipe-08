@@ -6,7 +6,6 @@ using CG_Biblioteca;
 using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Collections.Generic;
-using OpenTK.Mathematics;
 
 namespace gcgcg
 {
@@ -21,8 +20,8 @@ namespace gcgcg
     public PrimitiveType PrimitivaTipo { get => primitivaTipo; set => primitivaTipo = value; }
     private float primitivaTamanho = 1;
     public float PrimitivaTamanho { get => primitivaTamanho; set => primitivaTamanho = value; }
-    private Shader _shaderObjeto = new Shader("Shaders/shader.vert", "Shaders/shaderBranca.frag");
-    public Shader shaderObjeto { set => _shaderObjeto = value; }
+    protected Shader _shaderObjeto = new Shader("Shaders/shader.vert", "Shaders/shaderBranca.frag");
+    public Shader shaderCor { set => _shaderObjeto = value; }
 
     // Vértices do objeto TODO: o objeto mundo deveria ter estes atributos abaixo?
     protected List<Ponto4D> pontosLista = new List<Ponto4D>();
@@ -48,7 +47,12 @@ namespace gcgcg
     private char eixoRotacao = 'z';
     public void TrocaEixoRotacao(char eixo) => eixoRotacao = eixo;
 
+    protected List<Ponto4D> texturePoints = new List<Ponto4D>();
+    protected List<Ponto4D> normalPoints = new List<Ponto4D>();
 
+    private int _textureBufferObject;
+    private int _normalBufferObject;
+    
     public Objeto(Objeto paiRef, ref char _rotulo, Objeto objetoFilho = null)
     {
       this.paiRef = paiRef;
@@ -82,20 +86,56 @@ namespace gcgcg
         vertices[i + 2] = (float)pontosLista[ptoLista].Z;
         ptoLista++;
       }
-      bBox.Atualizar(matriz, pontosLista);
+
+      float[] textureVertices = new float[texturePoints.Count * 2];
+      var texturePointIndex = 0;
+      for (int i = 0; i < textureVertices.Length; i += 2)
+      {
+          textureVertices[i] = (float)texturePoints[texturePointIndex].X;
+          textureVertices[i + 1] = (float)texturePoints[texturePointIndex].Y;
+          texturePointIndex++;
+      }
+
+      float[] normalVertices = new float[normalPoints.Count * 3];
+      var normalPointsIndex = 0;
+      for (int i = 0; i < normalVertices.Length; i += 3)
+      {
+          normalVertices[i] = (float)normalPoints[normalPointsIndex].X;
+          normalVertices[i + 1] = (float)normalPoints[normalPointsIndex].Y;
+          normalVertices[i + 2] = (float)normalPoints[normalPointsIndex].Z;
+          normalPointsIndex++;
+      }
 
       GL.PointSize(primitivaTamanho);
 
       _vertexBufferObject = GL.GenBuffer();
       GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
       GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.StaticDraw);
+      
       _vertexArrayObject = GL.GenVertexArray();
       GL.BindVertexArray(_vertexArrayObject);
       GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
       GL.EnableVertexAttribArray(0);
+      
+      // Reference points to texture mapping
+      _textureBufferObject = GL.GenBuffer();
+      GL.BindBuffer(BufferTarget.ArrayBuffer, _textureBufferObject);
+      GL.BufferData(BufferTarget.ArrayBuffer, textureVertices.Length * sizeof(float), textureVertices, BufferUsageHint.StaticDraw);
+      GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 2 * sizeof(float), 0);
+      GL.EnableVertexAttribArray(1);
+
+      // Reference points to light mapping;
+      _normalBufferObject = GL.GenBuffer();
+      GL.BindBuffer(BufferTarget.ArrayBuffer, _normalBufferObject);
+      GL.BufferData(BufferTarget.ArrayBuffer, normalVertices.Length * sizeof(float), normalVertices, BufferUsageHint.StaticDraw);
+      GL.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
+      GL.EnableVertexAttribArray(2);
+
+      bBox.Atualizar(matriz,pontosLista);
     }
 
-    public void Desenhar(Transformacao4D matrizGrafo)
+    // FIXME: quando Classe mundo for Singleton não precisa passar _camera pois posso pegar ponteiro do mundo.
+    public void Desenhar(Transformacao4D matrizGrafo, Camera _camera)
     {
 #if CG_OpenGL && !CG_DirectX
       GL.PointSize(primitivaTamanho);
@@ -105,8 +145,15 @@ namespace gcgcg
       if (paiRef != null)
       {
         matrizGrafo = matrizGrafo.MultiplicarMatriz(matriz);
-        _shaderObjeto.SetMatrix4("transform", matrizGrafo.ObterDadosOpenTK());
-        _shaderObjeto.Use();
+
+        //// Atenção: manter a ordem da multiplicação das matrizes: "Model * View * Projeção". 
+        //// Model: matriz ModeltoWorld (também conhecida como modelo)
+        //// View: matriz WorldToView (também conhecida como visualização)
+        //// Projeção: matriz ViewTojectedSpace (também conhecida como projeção)
+        _shaderObjeto.SetMatrix4("model", matrizGrafo.ObterDadosOpenTK());
+        _shaderObjeto.SetMatrix4("view", _camera.GetViewMatrix());
+        _shaderObjeto.SetMatrix4("projection", _camera.GetProjectionMatrix());
+
         GL.DrawArrays(primitivaTipo, 0, pontosLista.Count);
 #elif CG_DirectX && !CG_OpenGL
       Console.WriteLine(" .. Coloque aqui o seu código em DirectX");
@@ -116,7 +163,7 @@ namespace gcgcg
       }
       for (var i = 0; i < objetosLista.Count; i++)
       {
-        objetosLista[i].Desenhar(matrizGrafo);
+        objetosLista[i].Desenhar(matrizGrafo, _camera);
       }
     }
 

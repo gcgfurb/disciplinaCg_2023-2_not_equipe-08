@@ -11,7 +11,7 @@ namespace gcgcg
             var nativeWindowSettings = new NativeWindowSettings()
             {
                 Size = new Vector2i(800, 800),
-                Title = "CG_N3",
+                Title = "CG_N4_Exemplo",
                 // This is needed to run on macos
                 Flags = ContextFlags.ForwardCompatible,
             };

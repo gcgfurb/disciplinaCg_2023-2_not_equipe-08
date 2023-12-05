@@ -1,0 +1,138 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\Furb-trabalhos\\Computação Gráfica\\disciplinaCg_2023-2_not_equipe-08\\Unidade4\\CG_N4\\CG_N4.csproj": {}
+  },
+  "projects": {
+    "D:\\Furb-trabalhos\\Computação Gráfica\\disciplinaCg_2023-2_not_equipe-08\\Unidade4\\CG_Biblioteca\\CG_Biblioteca.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Furb-trabalhos\\Computação Gráfica\\disciplinaCg_2023-2_not_equipe-08\\Unidade4\\CG_Biblioteca\\CG_Biblioteca.csproj",
+        "projectName": "CG_Biblioteca",
+        "projectPath": "D:\\Furb-trabalhos\\Computação Gráfica\\disciplinaCg_2023-2_not_equipe-08\\Unidade4\\CG_Biblioteca\\CG_Biblioteca.csproj",
+        "packagesPath": "C:\\Users\\buzar\\.nuget\\packages\\",
+        "outputPath": "D:\\Furb-trabalhos\\Computação Gráfica\\disciplinaCg_2023-2_not_equipe-08\\Unidade4\\CG_Biblioteca\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\buzar\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "OpenTK": {
+              "target": "Package",
+              "version": "[4.8.0, )"
+            },
+            "StbImageSharp": {
+              "target": "Package",
+              "version": "[2.27.13, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\Furb-trabalhos\\Computação Gráfica\\disciplinaCg_2023-2_not_equipe-08\\Unidade4\\CG_N4\\CG_N4.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Furb-trabalhos\\Computação Gráfica\\disciplinaCg_2023-2_not_equipe-08\\Unidade4\\CG_N4\\CG_N4.csproj",
+        "projectName": "CG_N4",
+        "projectPath": "D:\\Furb-trabalhos\\Computação Gráfica\\disciplinaCg_2023-2_not_equipe-08\\Unidade4\\CG_N4\\CG_N4.csproj",
+        "packagesPath": "C:\\Users\\buzar\\.nuget\\packages\\",
+        "outputPath": "D:\\Furb-trabalhos\\Computação Gráfica\\disciplinaCg_2023-2_not_equipe-08\\Unidade4\\CG_N4\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\buzar\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {
+              "D:\\Furb-trabalhos\\Computação Gráfica\\disciplinaCg_2023-2_not_equipe-08\\Unidade4\\CG_Biblioteca\\CG_Biblioteca.csproj": {
+                "projectPath": "D:\\Furb-trabalhos\\Computação Gráfica\\disciplinaCg_2023-2_not_equipe-08\\Unidade4\\CG_Biblioteca\\CG_Biblioteca.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "OpenTK": {
+              "target": "Package",
+              "version": "[4.8.0, )"
+            },
+            "StbImageSharp": {
+              "target": "Package",
+              "version": "[2.27.13, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
